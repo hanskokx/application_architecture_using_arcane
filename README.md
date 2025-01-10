@@ -89,7 +89,7 @@ A **feature** _generally_ consists of the following components:
 > [!WARNING]
 > No feature should communicate with or depend upon any other feature directly. Inter-feature communication should only occur via services.
 
-Therefore, a **feature** can generally be defined as:
+Therefore, a **feature** can generally be described in Figure 3.
 
 ```mermaid
 classDiagram
@@ -127,7 +127,9 @@ classDiagram
     StateManager *-- API
 ```
 
-As a user performs actions in the UI, events will be sent to the [state management](#state-management). When the state manager receives an event, it may emit a `Waiting` state, causing the UI to rebuild and indicate that the action is currently being performed. Then, the state manager will make a call to the feature's [API](#feature-api) to fulfill the request. Once the API has completed the request, either successfully or unsuccessfully, response is then returned to the state manager for further processing. A new state will be emitted from the state manager to indicate a success or failure state, and again the UI will rebuild to indicate the result. This process can be visualized in the following manner:
+> Figure 3: The logical representation of a typical feature
+
+As a user performs actions in the UI, events will be sent to the [state management](#state-management). When the state manager receives an event, it may emit a `Waiting` state, causing the UI to rebuild and indicate that the action is currently being performed. Then, the state manager will make a call to the feature's [API](#feature-api) to fulfill the request. Once the API has completed the request, either successfully or unsuccessfully, response is then returned to the state manager for further processing. A new state will be emitted from the state manager to indicate a success or failure state, and again the UI will rebuild to indicate the result. This process can be visualized in the following in Figure 4.
 
 ```mermaid
 %% SequenceDiagram
@@ -148,6 +150,8 @@ sequenceDiagram
     FeatureStateManager->>-FeatureScreen: Emit MyState
     note over FeatureScreen: Widget(s) rebuild
 ```
+
+> Figure 4: The flow diagram of data flow in a feature
 
 ### Screen(s)
 
