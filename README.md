@@ -2,7 +2,6 @@
 
 ## Contents
 
-- [Contents](#contents)
 - [Overview](#overview)
   - [Slides](#slides)
   - [Implementations](#implementations)
