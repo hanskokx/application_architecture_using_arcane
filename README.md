@@ -52,7 +52,7 @@
 
 ## Overview
 
-This architecture has been designed in such a way that it will be easy to maintain, extend, and understand the inner-workings of. Logically, the it has been separated into a number of _features_. The styling of the application is primarily orchestrated via the application's [`Theme`](#Theming%20and%20Styling), which consists of a light mode, a dark mode, and tooling to gracefully switch between modes either automatically or manually.
+This architecture has been designed in such a way that it will be easy to maintain, extend, and understand the inner-workings of. Logically, the it has been separated into a number of _features_. The styling of the application is primarily orchestrated via the application's [`Theme`](#theming-and-styling), which consists of a light mode, a dark mode, and tooling to gracefully switch between modes either automatically or manually.
 
 This architecture uses the Arcane (**A**gnostic **R**eusable **C**omponent **A**rchitecture for **N**ew **E**cosystems) Framework found in the [arcane_framework](https://pub.dev/packages/arcane_framework) package, which was created by Hans Kokx.
 
@@ -86,8 +86,8 @@ Applications are composed of features. Features are the building blocks of an ap
 A **feature** _generally_ consists of the following components:
 
 - One or more [screens](#Screen(s)) that a user can navigate to
-- A [state management](#State%20Management) solution (which could be `Bloc`, `RiverPod`, `Provider`, or anything else)
-- An [API](#Feature%20API) to communicate with external services, either on the device (e.g., with Bluetooth devices) or on the internet (e.g., and external API/backend via GraphQL, REST, gRPC, etc.)
+- A [state management](#state-management) solution (which could be `Bloc`, `RiverPod`, `Provider`, or anything else)
+- An [API](#feature-api) to communicate with external services, either on the device (e.g., with Bluetooth devices) or on the internet (e.g., and external API/backend via GraphQL, REST, gRPC, etc.)
 
 > [!warning]
 > No feature should communicate with or depend upon any other feature directly. Inter-feature communication should only occur via services.
@@ -130,7 +130,7 @@ classDiagram
     StateManager *-- API
 ```
 
-As a user performs actions in the UI, events will be sent to the [state management](#State%20Management). When the state manager receives an event, it may emit a `Waiting` state, causing the UI to rebuild and indicate that the action is currently being performed. Then, the state manager will make a call to the feature's [API](#Feature%20API) to fulfill the request. Once the API has completed the request, either successfully or unsuccessfully, response is then returned to the state manager for further processing. A new state will be emitted from the state manager to indicate a success or failure state, and again the UI will rebuild to indicate the result. This process can be visualized in the following manner:
+As a user performs actions in the UI, events will be sent to the [state management](#state-management). When the state manager receives an event, it may emit a `Waiting` state, causing the UI to rebuild and indicate that the action is currently being performed. Then, the state manager will make a call to the feature's [API](#feature-api) to fulfill the request. Once the API has completed the request, either successfully or unsuccessfully, response is then returned to the state manager for further processing. A new state will be emitted from the state manager to indicate a success or failure state, and again the UI will rebuild to indicate the result. This process can be visualized in the following manner:
 
 ```mermaid
 %% SequenceDiagram
@@ -154,22 +154,22 @@ sequenceDiagram
 
 ### Screen(s)
 
-Each feature will contain one or more screens. For _most_ features, the screen will be some sort of `Scaffold` with a [state consumer](#State%20Management) that dictates the current state of the widget(s). The screen is where a user will interact with the application. User and automated actions trigger events to be sent to the state manager, which in turns communicates to the backend via the [API](#Feature%20API).
+Each feature will contain one or more screens. For _most_ features, the screen will be some sort of `Scaffold` with a [state consumer](#state-management) that dictates the current state of the widget(s). The screen is where a user will interact with the application. User and automated actions trigger events to be sent to the state manager, which in turns communicates to the backend via the [API](#feature-api).
 
 ### State Management
 
 This architecture is _state management agnostic_, meaning that any state management solution is compatible, including mixing and matching different state management solutions. However, it has been primarily designed around and tested/used in production with the [bloc](https://bloclibrary.dev/) library.
 
-A single state manager is created for each feature, which is then registered into a top-level state provider. Each state provider communicates with external services via a feature-level [API](#Feature%20API), which is provided via [dependency injection](#Dependency%20Injection).
+A single state manager is created for each feature, which is then registered into a top-level state provider. Each state provider communicates with external services via a feature-level [API](#feature-api), which is provided via [dependency injection](#dependency-injection).
 
 ### Feature API
 
-Each feature will (typically) have an API. The API, which is registered in the [dependency injection](#Dependency%20Injection) system, communicates with external services and APIs (e.g., Bluetooth or the backend). The response returned from every call to the API is always a [`Result`](https://pub.dev/packages/result_monad) monad.
+Each feature will (typically) have an API. The API, which is registered in the [dependency injection](#dependency-injection) system, communicates with external services and APIs (e.g., Bluetooth or the backend). The response returned from every call to the API is always a [`Result`](https://pub.dev/packages/result_monad) monad.
 
 > [!info]
 > A `monad` is a design pattern in functional programming that encapsulates computations and their potential side effects. In this context, it refers to a structure that wraps the result of an operation, allowing for cleaner error handling and chaining of operations.
 
-The API _generally_ uses the [HTTP Client](#HTTP%20Client) to communicate with the backend, which [automatically manages authentication tokens](#Authorization%20Interceptor).
+The API _generally_ uses the [HTTP Client](#http-client) to communicate with the backend, which [automatically manages authentication tokens](#authorization-interceptor).
 
 ## Services
 
@@ -186,7 +186,7 @@ To facilitate easier use of services, I have created a package on [pub.dev](http
 
 Arcane provides access to `ArcaneService` instances via `BuildContext` using the `ArcaneServiceProvider`. This means that accessing an `ArcaneService`'s values via `BuildContext` provides an inherent `ChangeNotifier` - when a value is updated, widgets using that value will automatically be rebuilt.
 
-For more details, refer to the [official documentation](https://pub.dev/packages/arcane_framework#services). More information about services can be found in the [Example Service](#Example%20Service) section.
+For more details, refer to the [official documentation](https://pub.dev/packages/arcane_framework#services). More information about services can be found in the [Example Service](#example-service) section.
 
 Note that registering your service instances in `Arcane` isn’t strictly necessary to use `ArcaneService`s but it does make using them much more convenient. For example:
 
@@ -457,7 +457,7 @@ NewRelic.I.log(
 
 `Arcane`’s logging system offers a number of options to fine-tune log messages, so be sure to look at the [available options](https://pub.dev/packages/arcane_framework#logging).
 
-Debug logging is a fine art. In general, it’s better to log _too many_ messages than _too few_. When a user taps a button, capture the event. When the [state management](#State%20Management) begins processing a request, capture the event. When the [API](#Feature%20API) starts processing a request, capture the event. When a result is determined, capture the event. Capture as much data as is useful for somebody to come back through later and determine exactly what sequence of events led to a particular outcome.
+Debug logging is a fine art. In general, it’s better to log _too many_ messages than _too few_. When a user taps a button, capture the event. When the [state management](#state-management) begins processing a request, capture the event. When the [API](#feature-api) starts processing a request, capture the event. When a result is determined, capture the event. Capture as much data as is useful for somebody to come back through later and determine exactly what sequence of events led to a particular outcome.
 
 The key in logging is to as accurately as possible label the severity of each log event. When you begin processing an event, there might not be any useful information to capture yet, so you might log the event as `Level.debug`. When an event is processed successfully, you might want to make note of it with `Level.info`. When something fails, perhaps a `Level.error` is more appropriate.
 
@@ -587,7 +587,7 @@ abstract class AppConfig {
 }
 ```
 
-As a matter of convenience, a `config.dart` file can be created adjacent to your `main.dart` which contains this `AppConfig` class. Also in this file, it’s recommended to place your `Feature` enum (see [Basic Services](#Basic%20Services)) and your `EnvVar` enum (see [Secrets](#secrets)).
+As a matter of convenience, a `config.dart` file can be created adjacent to your `main.dart` which contains this `AppConfig` class. Also in this file, it’s recommended to place your `Feature` enum (see [Basic Services](#Basic-Services)) and your `EnvVar` enum (see [Secrets](#secrets)).
 
 ## Dependency Injection
 
@@ -596,18 +596,18 @@ This architecture utilizes a dependency injection (DI) solution, such as [GetIt]
 > [!info]
 > Dependency injection is a software design pattern where a class receives its dependencies from external sources rather than creating them itself. This technique promotes loose coupling, easier testing, and improved modularity in software development.
 
-When creating an instance of a state management provider, retrieve the corresponding [API](#Feature%20API) from the dependency injection (DI) system. This approach enables dynamic loading and unloading of different APIs during runtime. For example, in a "demo" mode, logging in as a demo account could trigger the replacement of production APIs with dummy APIs that return fixed data.
+When creating an instance of a state management provider, retrieve the corresponding [API](#feature-api) from the dependency injection (DI) system. This approach enables dynamic loading and unloading of different APIs during runtime. For example, in a "demo" mode, logging in as a demo account could trigger the replacement of production APIs with dummy APIs that return fixed data.
 
-The dependency injection system also allows for easier testing, as dependencies can be mocked or replaced with stubs, and it decouples the [state management](#State%20Management) from the APIs.
+The dependency injection system also allows for easier testing, as dependencies can be mocked or replaced with stubs, and it decouples the [state management](#state-management) from the APIs.
 
 > [!info]
 > Stubs are simplified implementations of components or functions used in software testing. They provide predefined responses to specific inputs, allowing developers to test parts of a system in isolation without relying on the actual, complex implementations.
 
-In addition, an [HTTP client](#HTTP%20Client) may be registered as needed in the DI solution, allowing for a single client to retain authentication headers across multiple features.
+In addition, an [HTTP client](#http-client) may be registered as needed in the DI solution, allowing for a single client to retain authentication headers across multiple features.
 
 ## HTTP Client
 
-The HTTP Client is used by [feature APIs](#Feature%20API), automatically manages authentication headers, and consists of several parts:
+The HTTP Client is used by [feature APIs](#feature-api), automatically manages authentication headers, and consists of several parts:
 
 - A client interface, such as an `AppGraphQLClient`, `AppHTTPClient`, and/or a client for any other type of communication.
 - The `DioHelper`
@@ -617,7 +617,7 @@ While this architecture has been developed and tested using [`Dio`](https://pub.
 
 ### Client Interface
 
-The client interface provides an interface to the the [Dio](https://pub.dev/packages/dio) instance that is registered within the [dependency injection](#Dependency%20Injection) system when the [DioHelper](#Dio%20Helper) is instantiated. When a [feature’s API](#Feature%20API) communicates externally, it does so via this client interface.
+The client interface provides an interface to the the [Dio](https://pub.dev/packages/dio) instance that is registered within the [dependency injection](#dependency-injection) system when the [DioHelper](#dio-helper) is instantiated. When a [feature’s API](#feature-api) communicates externally, it does so via this client interface.
 
 ```dart
 // This is an example of a GraphQL client
@@ -713,7 +713,7 @@ extension QueryResultExtension on QueryResult {
 
 ### Dio Helper
 
-The `DioHelper` creates an instance of the [Dio](https://pub.dev/packages/dio) HTTP client. This is where the [authorization interceptor](#Authorization%20Interceptor) is registered and where default values, such as the [base URL](#Secrets%20and%20Configuration) and timeout values are set. The `DioHelper` is only invoked from within the [dependency injection](#Dependency%20Injection) system, where the [Dio](https://pub.dev/packages/dio) instance is created.
+The `DioHelper` creates an instance of the [Dio](https://pub.dev/packages/dio) HTTP client. This is where the [authorization interceptor](#authorization-interceptor) is registered and where default values, such as the [base URL](#secrets-and-configuration) and timeout values are set. The `DioHelper` is only invoked from within the [dependency injection](#dependency-injection) system, where the [Dio](https://pub.dev/packages/dio) instance is created.
 
 ```dart
 // file: dio_helper.dart
@@ -788,11 +788,11 @@ abstract class DioHelper {
 
 ### Interceptors
 
-Interceptors are used to run code before and/or after a network request is made through the [client](#Client%20Interface). Multiple interceptors can be added simultaneously. A couple of examples interceptors can be found in the following sections.
+Interceptors are used to run code before and/or after a network request is made through the [client](#client-interface). Multiple interceptors can be added simultaneously. A couple of examples interceptors can be found in the following sections.
 
 #### Authorization Interceptor
 
-The `AuthorizationInterceptor` automatically manages the auth headers (often in the form of an OAuth2 bearer token). It is registered in the [dependency injection](#Dependency%20Injection) system, and as an interceptor in the [DioHelper](#Dio%20Helper). This is also where any additional headers can be (automatically) added to each HTTP request (such as a unique request ID, which is then also logged using a [logging service](#logging) to facilitate coordinating requests between the front-end and backend during troubleshooting).
+The `AuthorizationInterceptor` automatically manages the auth headers (often in the form of an OAuth2 bearer token). It is registered in the [dependency injection](#dependency-injection) system, and as an interceptor in the [DioHelper](#dio-helper). This is also where any additional headers can be (automatically) added to each HTTP request (such as a unique request ID, which is then also logged using a [logging service](#logging) to facilitate coordinating requests between the front-end and backend during troubleshooting).
 
 ```dart
 // file: authorization_interceptor.dart
@@ -917,9 +917,9 @@ This architecture is _router agnostic_, meaning that any routing solution is com
 
 Routing consists of several key pieces:
 
-- A list of [available routes](#Defining%20Available%20Routes)
-- A way to [redirect unauthenticated users](#Redirection%20Handling) who try to access protected routes
-- [The router](#The%20Router) itself
+- A list of [available routes](#defining-available-routes)
+- A way to [redirect unauthenticated users](#redirection-handling) who try to access protected routes
+- [The router](#the-router) itself
 
 ### Defining Available Routes
 
@@ -955,7 +955,7 @@ context.goNamed(AppRoute.login.name);
 
 When a user is not authenticated, they should not be able to access protected routes. Instead, they should be redirected to the login screen, or some other appropriate location. Additionally, the application should have some awareness of the route they were trying to access to send them back to that location after they’ve logged in (e.g., in the case of a deep-link.)
 
-Since we’re already marking routes as protected in our [`AppRoute`](#Defining%20Available%20Routes) enum, we can add a quick redirect check into GoRouter:
+Since we’re already marking routes as protected in our [`AppRoute`](#defining-available-routes) enum, we can add a quick redirect check into GoRouter:
 
 ```dart
 GoRouter(
@@ -1104,7 +1104,7 @@ context.pushReplacementNamed(AppRoute.myRoute.name);
 
 #### Redirecting Upon Logout
 
-When the user logs out, they should be redirected back to the login screen. We can accomplish this by adding a method to our [`AppRouter`](#The%20Router) class that performs the logout functions and then redirects us when done. For more information, see [Authentication](#authentication).
+When the user logs out, they should be redirected back to the login screen. We can accomplish this by adding a method to our [`AppRouter`](#the-router) class that performs the logout functions and then redirects us when done. For more information, see [Authentication](#authentication).
 
 ```dart
 abstract class AppRouter {
@@ -1134,7 +1134,7 @@ abstract class AppRouter {
 }
 ```
 
-When logging out of the application, to ensure a redirect we can call the [`AppRouter`](#The%20Router)’s `logout` method:
+When logging out of the application, to ensure a redirect we can call the [`AppRouter`](#the-router)’s `logout` method:
 
 ```dart
 AppRouter.logout(context);
@@ -1237,7 +1237,7 @@ class AppScaffoldShell extends StatelessWidget {
 
 This is where the tabs that appear in your tab bar are defined. These values _could_ be abstracted out (perhaps into the `AppRouter` as a getter), if so desired.
 
-The `AppScaffoldShell` is only used within the [`AppRouter`](#The%20Router) as the base route for all screens that include a tab bar (or other navigation structure).
+The `AppScaffoldShell` is only used within the [`AppRouter`](#the-router) as the base route for all screens that include a tab bar (or other navigation structure).
 
 ### AppScaffold
 
@@ -1337,7 +1337,7 @@ class AppScaffold extends StatelessWidget {
 }
 ```
 
-Due to the nested nature of the `AppScaffoldShell` and `AppScaffold`, overlapping animations may cause undesirable effects. Therefore, it is recommended that the `AppScaffold` widget should be wrapped in a `NoTransitionPage` widget and returned from the `pageBuilder` method for each `StatefulShellBranch` branch that your [`AppRouter`](#The%20Router)'s `StatefulShellRoute.indexedStack` provides.
+Due to the nested nature of the `AppScaffoldShell` and `AppScaffold`, overlapping animations may cause undesirable effects. Therefore, it is recommended that the `AppScaffold` widget should be wrapped in a `NoTransitionPage` widget and returned from the `pageBuilder` method for each `StatefulShellBranch` branch that your [`AppRouter`](#the-router)'s `StatefulShellRoute.indexedStack` provides.
 
 ## Theming and Styling
 
@@ -1499,7 +1499,7 @@ class _MainAppState extends State<MainApp> {
 
 ## Authentication
 
-Authentication using this architecture has been standardized using `Arcane` by creating an [Authentication Interface](#Authentication%20Interfaces) for your auth provider. This interface is then registered in `Arcane`. By doing this, we have a single API (via `Arcane`) that handles authentication and manages authentication state, all without caring about the specific auth provider implementation.
+Authentication using this architecture has been standardized using `Arcane` by creating an [Authentication Interface](#authentication-interfaces) for your auth provider. This interface is then registered in `Arcane`. By doing this, we have a single API (via `Arcane`) that handles authentication and manages authentication state, all without caring about the specific auth provider implementation.
 
 When using `Arcane` with an authentication interface, it becomes trivial to switch auth providers, re-use code between projects, and simplify testing and authentication checks.
 
@@ -1671,7 +1671,7 @@ It is possible to use the interface _without_ `Arcane`, simply by manually invok
 
 ### Logging in and out
 
-Provided you have [registered your interface](#Registering%20Authentication%20Interfaces) in `Arcane`, logging in and out is done by calling `Arcane` directly.
+Provided you have [registered your interface](#registering-authentication-interfaces) in `Arcane`, logging in and out is done by calling `Arcane` directly.
 
 #### Logging In
 
@@ -1696,7 +1696,7 @@ print(credentials.email); // Access the email
 print(credentials.password); // Access the password
 ```
 
-For an example of how to handle a `record` within your interface, refer to the example in [Authentication Interfaces](#Authentication%20Interfaces).
+For an example of how to handle a `record` within your interface, refer to the example in [Authentication Interfaces](#authentication-interfaces).
 
 Once your input type has been defined, you can make your login request.
 
@@ -1718,7 +1718,7 @@ final bool isSignedIn = Arcane.auth.isSignedIn.value;
 
 #### Logging Out
 
-When logging out, you can call `Arcane` directly as long as your [authentication interface](#Authentication%20Interfaces) has been registered and you used `Arcane.auth.login()` to log in. If this is not the case, you will need to call into your authentication interface directly and manage your authentication state manually.
+When logging out, you can call `Arcane` directly as long as your [authentication interface](#authentication-interfaces) has been registered and you used `Arcane.auth.login()` to log in. If this is not the case, you will need to call into your authentication interface directly and manage your authentication state manually.
 
 ```dart
 await Arcane.auth.logOut(
@@ -1743,4 +1743,4 @@ GoRouter(
 > [!caution]
 > This method will also refresh the router when logging in and should not be used if the `onLoggedOut` method also specifies a redirect.  
 
-Refer to [Redirecting Upon Logout](#Redirecting%20Upon%20Logout) for an example implementation.
+Refer to [Redirecting Upon Logout](#redirecting-upon-logout) for an example implementation.
