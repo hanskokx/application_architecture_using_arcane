@@ -52,7 +52,7 @@
 
 ## Overview
 
-This architecture has been designed in such a way that it will be easy to maintain, extend, and understand the inner-workings of. Logically, the it has been separated into a number of _features_. The styling of the application is primarily orchestrated via the application's [`Theme`](#theming-and-styling), which consists of a light mode, a dark mode, and tooling to gracefully switch between modes either automatically or manually.
+This architecture has been designed in such a way that it will be easy to maintain, extend, and understand the inner-workings of. Logically, it has been separated into a number of _features_. The styling of the application is primarily orchestrated via the application's [`Theme`](#theming-and-styling), which consists of a light mode, a dark mode, and tooling to gracefully switch between modes either automatically or manually.
 
 This architecture uses the Arcane (**A**gnostic **R**eusable **C**omponent **A**rchitecture for **N**ew **E**cosystems) Framework found in the [arcane_framework](https://pub.dev/packages/arcane_framework) package, which was created by Hans Kokx.
 
