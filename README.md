@@ -402,23 +402,23 @@ Once one (or more) logging interfaces have been created and are ready to use, th
 
 ```dart
 Future<void> main() async {
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-   await Arcane.logger.registerInterfaces([
-  // Register the debug console logging interface
-     DebugConsole.I,
-     // Register the New Relic logging interface
-  NewRelic.I,
- ]);
+  await Arcane.logger.registerInterfaces([
+    // Register the debug console logging interface
+    DebugConsole.I,
+    // Register the New Relic logging interface
+    NewRelic.I,
+  ]);
 
- // Initialize registered logging interfaces
- // NOTE: This step may be deferred until a user has consented to app tracking.
- await Arcane.logger.initializeInterfaces();
+  // Initialize registered logging interfaces
+  // NOTE: This step may be deferred until a user has consented to app tracking.
+  await Arcane.logger.initializeInterfaces();
 
- // Alternatively, interfaces may be initialized independently:
- await NewRelic.I.init();
+  // Alternatively, interfaces may be initialized independently:
+  await NewRelic.I.init();
 
- runApp(MyApp());
+  runApp(MyApp());
 }
 ```
 
