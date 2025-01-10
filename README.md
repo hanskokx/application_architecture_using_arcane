@@ -58,20 +58,19 @@ This architecture uses the Arcane (**A**gnostic **R**eusable **C**omponent **A**
 
 The logical layout of the application is defined in Figure 1:
 
-![[Architecture.svg]]
+![Architecture](https://github.com/user-attachments/assets/55c3be4d-b274-4b47-a061-bea4afceb843)
 Figure 1: Logical architecture layout
-![[Architecture.drawio]]
 
 A simplified version of the diagram can be found in Figure 2:
 
-![[Architecture-simple.jpg]]
+![Architecture-simple](https://github.com/user-attachments/assets/00ea0ee7-ad43-442e-bbf8-4617b6dbf3f8)
 Figure 2: Logical architecture layout (simplified)
-![[Architecture-simple.drawio]]
 
 ### Slides
 
 For slides that present this architecture, please click [here](https://docs.google.com/presentation/d/1324qUQ19uyAPO83Cn2mRgnQYMpt9zFZqFm3s3raPddo/edit?usp=sharing).
-![[Application Architecture.pptx]]
+
+Slides: [Application Architecture.pptx](https://github.com/user-attachments/files/18379060/Application.Architecture.pptx)
 
 ### Implementations
 
@@ -1151,8 +1150,10 @@ The App Scaffold consists of two parts:
 
 Video 1 showcases (approximately) what it looks like in action:
 
-![[adaptive_scaffold_example.mp4]]
+https://github.com/user-attachments/assets/c477705d-ba44-487b-a907-0fc7d89222f0
+
 Video 1: an example implementation of the custom_adaptive_scaffold (in this example, [flutter_adaptive_scaffold](https://pub.dev/packages/flutter_adaptive_scaffold) is used, instead, which is what custom_adaptive_scaffold is based on).
+
 
 #### AppScaffoldShell
 
