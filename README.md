@@ -89,7 +89,7 @@ A **feature** _generally_ consists of the following components:
 - A [state management](#state-management) solution (which could be `Bloc`, `RiverPod`, `Provider`, or anything else)
 - An [API](#feature-api) to communicate with external services, either on the device (e.g., with Bluetooth devices) or on the internet (e.g., and external API/backend via GraphQL, REST, gRPC, etc.)
 
-> [!warning]
+> [!WARNING]
 > No feature should communicate with or depend upon any other feature directly. Inter-feature communication should only occur via services.
 
 Therefore, a **feature** can generally be defined as:
@@ -166,7 +166,7 @@ A single state manager is created for each feature, which is then registered int
 
 Each feature will (typically) have an API. The API, which is registered in the [dependency injection](#dependency-injection) system, communicates with external services and APIs (e.g., Bluetooth or the backend). The response returned from every call to the API is always a [`Result`](https://pub.dev/packages/result_monad) monad.
 
-> [!info]
+> [!TIP]
 > A `monad` is a design pattern in functional programming that encapsulates computations and their potential side effects. In this context, it refers to a structure that wraps the result of an operation, allowing for cleaner error handling and chaining of operations.
 
 The API _generally_ uses the [HTTP Client](#http-client) to communicate with the backend, which [automatically manages authentication tokens](#authorization-interceptor).
@@ -175,7 +175,7 @@ The API _generally_ uses the [HTTP Client](#http-client) to communicate with the
 
 A **service** is a singleton that is used to store information which multiple features may care about. Notably, a service _does not_ perform complex logic - it (optionally) sets values and notifies listeners of changes to those values or simply performs some action that isn’t specific to a single feature.
 
-> [!info]
+> [!TIP]
 > A singleton is a software design pattern where a class has only one instance that is globally accessible throughout the application. It ensures a single point of control for a shared resource or service.
 
 There are (generally speaking) two types of services: _basic_ services and _advanced_ services. Basic services hold a piece of data that is available throughout the application, while an advanced service may perform more complex logic.
@@ -480,7 +480,7 @@ Secrets used by the application are accessed via environment variables. This acc
 2. Different sets of environment variables can define different configurations for the application. While your CI/CD pipeline should (almost) always use production environment variables, you may want your development machine to have access to production, development, and staging environments.
 3. Leveraging environment variables makes your code much cleaner and simpler - you only have to write code for a single environment.
 
-> [!info]
+> [!TIP]
 > Environment variables are configuration settings stored outside the application code. They're typically used to manage sensitive information—such as API keys—or to specify different configurations for various deployment environments (e.g., development, staging, production).
 
 On a developer’s computer, environment variables are stored in `.env` files - one for each configuration (e.g., `.env.dev`, `.env.release`, etc.) and are _not_ checked into source control. Your application will read in variables from the `.env` file (which will be written to during a CI/CD build pipeline), so switching environments is as simple as copying the appropriate file to `.env`. To facilitate reading this file from the application, it should be included in the `assets` directory, such as `my_app/assets/.env`, with the `assets` directory included in `pubspec.yaml`.
@@ -593,14 +593,14 @@ As a matter of convenience, a `config.dart` file can be created adjacent to your
 
 This architecture utilizes a dependency injection (DI) solution, such as [GetIt](https://pub.dev/packages/get_it).
 
-> [!info]
+> [!TIP]
 > Dependency injection is a software design pattern where a class receives its dependencies from external sources rather than creating them itself. This technique promotes loose coupling, easier testing, and improved modularity in software development.
 
 When creating an instance of a state management provider, retrieve the corresponding [API](#feature-api) from the dependency injection (DI) system. This approach enables dynamic loading and unloading of different APIs during runtime. For example, in a "demo" mode, logging in as a demo account could trigger the replacement of production APIs with dummy APIs that return fixed data.
 
 The dependency injection system also allows for easier testing, as dependencies can be mocked or replaced with stubs, and it decouples the [state management](#state-management) from the APIs.
 
-> [!info]
+> [!TIP]
 > Stubs are simplified implementations of components or functions used in software testing. They provide predefined responses to specific inputs, allowing developers to test parts of a system in isolation without relying on the actual, complex implementations.
 
 In addition, an [HTTP client](#http-client) may be registered as needed in the DI solution, allowing for a single client to retain authentication headers across multiple features.
@@ -979,7 +979,7 @@ GoRouter(
 );
 ```
 
-> [!note]
+> [!NOTE]
 > Note that this calls into `Arcane` to determine the current authentication status.
 
 ### The Router
@@ -1677,7 +1677,7 @@ Provided you have [registered your interface](#registering-authentication-interf
 
 When logging in with an `ArcaneAuthInterface`, you'll first need to define the type of input you'll be using. This could be a class that has been created, or something as simple as a `record`.
 
-> [!info]
+> [!TIP]
 > The `record` was introduced in Dart 3.0. Documentation for Dart records can be found [here](https://dart.dev/language/records).
 
 An example input type using a Dart `record` would be:
@@ -1740,7 +1740,7 @@ GoRouter(
 );
 ```
 
-> [!caution]
+> [!CAUTION]
 > This method will also refresh the router when logging in and should not be used if the `onLoggedOut` method also specifies a redirect.  
 
 Refer to [Redirecting Upon Logout](#redirecting-upon-logout) for an example implementation.
