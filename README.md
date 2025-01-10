@@ -68,9 +68,7 @@ A simplified version of the diagram can be found in Figure 2:
 
 ### Slides
 
-For slides that present this architecture, please click [here](https://docs.google.com/presentation/d/1324qUQ19uyAPO83Cn2mRgnQYMpt9zFZqFm3s3raPddo/edit?usp=sharing).
-
-Slides: [Application Architecture.pptx](https://github.com/user-attachments/files/18379060/Application.Architecture.pptx)
+For slides that present this architecture, please click [here](https://github.com/user-attachments/files/18379060/Application.Architecture.pptx).
 
 ### Implementations
 
